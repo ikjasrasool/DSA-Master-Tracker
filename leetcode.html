@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Master Tracker - Complete Interview Prep</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+            color: #1a202c;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .difficulty-filters {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .pattern-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .pattern-header {
+            padding: 1.25rem;
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pattern-header:hover {
+            background: #edf2f7;
+        }
+
+        .pattern-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .expand-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .pattern-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .progress-badge {
+            background: #48bb78;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            width: 150px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #667eea);
+            transition: width 0.5s ease;
+        }
+
+        .pattern-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .pattern-content.expanded {
+            max-height: 10000px;
+        }
+
+        .problems-grid {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1rem;
+        }
+
+        .problem-card {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .problem-card.completed {
+            background: #f0fdf4;
+            border-color: #48bb78;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .checkbox:hover {
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .checkbox.checked {
+            background: #48bb78;
+            border-color: #48bb78;
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .problem-info {
+            flex: 1;
+        }
+
+        .problem-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .difficulty-badge {
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .difficulty-medium {
+            background: #feebc8;
+            color: #744210;
+        }
+
+        .difficulty-hard {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .leetcode-btn {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .leetcode-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .resources {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        .resources h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .resource-card {
+            padding: 1.25rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #1a202c;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .resource-title {
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-desc {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        @media (max-width: 768px) {
+            .problems-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        const DSA_DATA = {
+            "Arrays & Hashing": [
+                {
+                    name: "Two Sum Pattern",
+                    problems: [
+                        { id: 1, name: "Two Sum", difficulty: "easy" },
+                        { id: 167, name: "Two Sum II - Input Array Is Sorted", difficulty: "medium" },
+                        { id: 15, name: "3Sum", difficulty: "medium" },
+                        { id: 16, name: "3Sum Closest", difficulty: "medium" },
+                        { id: 18, name: "4Sum", difficulty: "medium" },
+                        { id: 454, name: "4Sum II", difficulty: "medium" },
+                        { id: 560, name: "Subarray Sum Equals K", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Stock Problems",
+                    problems: [
+                        { id: 121, name: "Best Time to Buy and Sell Stock", difficulty: "easy" },
+                        { id: 122, name: "Best Time to Buy and Sell Stock II", difficulty: "medium" },
+                        { id: 123, name: "Best Time to Buy and Sell Stock III", difficulty: "hard" },
+                        { id: 188, name: "Best Time to Buy and Sell Stock IV", difficulty: "hard" },
+                        { id: 309, name: "Best Time to Buy and Sell Stock with Cooldown", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Product & Subarray",
+                    problems: [
+                        { id: 238, name: "Product of Array Except Self", difficulty: "medium" },
+                        { id: 152, name: "Maximum Product Subarray", difficulty: "medium" },
+                        { id: 53, name: "Maximum Subarray", difficulty: "medium" },
+                        { id: 918, name: "Maximum Sum Circular Subarray", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Anagrams & Grouping",
+                    problems: [
+                        { id: 49, name: "Group Anagrams", difficulty: "medium" },
+                        { id: 242, name: "Valid Anagram", difficulty: "easy" },
+                        { id: 438, name: "Find All Anagrams in a String", difficulty: "medium" },
+                        { id: 567, name: "Permutation in String", difficulty: "medium" }
+                    ]
+                }
+            ],
+            "Two Pointers": [
+                {
+                    name: "Opposite Direction Pointers",
+                    problems: [
+                        { id: 11, name: "Container With Most Water", difficulty: "medium" },
+                        { id: 15, name: "3Sum", difficulty: "medium" },
+                        { id: 167, name: "Two Sum II", difficulty: "medium" },
+                        { id: 344, name: "Reverse String", difficulty: "easy" },
+                        { id: 345, name: "Reverse Vowels of a String", difficulty: "easy" },
+                        { id: 977, name: "Squares of a Sorted Array", difficulty: "easy" },
+                        { id: 881, name: "Boats to Save People", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Fast & Slow Pointers",
+                    problems: [
+                        { id: 141, name: "Linked List Cycle", difficulty: "easy" },
+                        { id: 142, name: "Linked List Cycle II", difficulty: "medium" },
+                        { id: 202, name: "Happy Number", difficulty: "easy" },
+                        { id: 287, name: "Find the Duplicate Number", difficulty: "medium" },
+                        { id: 876, name: "Middle of the Linked List", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "In-place Modification",
+                    problems: [
+                        { id: 26, name: "Remove Duplicates from Sorted Array", difficulty: "easy" },
+                        { id: 27, name: "Remove Element", difficulty: "easy" },
+                        { id: 80, name: "Remove Duplicates from Sorted Array II", difficulty: "medium" },
+                        { id: 283, name: "Move Zeroes", difficulty: "easy" },
+                        { id: 75, name: "Sort Colors", difficulty: "medium" },
+                        { id: 844, name: "Backspace String Compare", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "Palindrome & Expanding",
+                    problems: [
+                        { id: 5, name: "Longest Palindromic Substring", difficulty: "medium" },
+                        { id: 647, name: "Palindromic Substrings", difficulty: "medium" },
+                        { id: 125, name: "Valid Palindrome", difficulty: "easy" },
+                        { id: 680, name: "Valid Palindrome II", difficulty: "easy" }
+                    ]
+                }
+            ],
+            "Sliding Window": [
+                {
+                    name: "Fixed Size Window",
+                    problems: [
+                        { id: 643, name: "Maximum Average Subarray I", difficulty: "easy" },
+                        { id: 1456, name: "Maximum Number of Vowels in a Substring", difficulty: "medium" },
+                        { id: 1343, name: "Number of Sub-arrays of Size K", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Variable Size Window",
+                    problems: [
+                        { id: 3, name: "Longest Substring Without Repeating Characters", difficulty: "medium" },
+                        { id: 76, name: "Minimum Window Substring", difficulty: "hard" },
+                        { id: 209, name: "Minimum Size Subarray Sum", difficulty: "medium" },
+                        { id: 424, name: "Longest Repeating Character Replacement", difficulty: "medium" },
+                        { id: 713, name: "Subarray Product Less Than K", difficulty: "medium" },
+                        { id: 904, name: "Fruit Into Baskets", difficulty: "medium" },
+                        { id: 1004, name: "Max Consecutive Ones III", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Character Frequency Matching",
+                    problems: [
+                        { id: 438, name: "Find All Anagrams in a String", difficulty: "medium" },
+                        { id: 567, name: "Permutation in String", difficulty: "medium" },
+                        { id: 30, name: "Substring with Concatenation of All Words", difficulty: "hard" }
+                    ]
+                }
+            ],
+            "Binary Trees": [
+                {
+                    name: "DFS - Preorder",
+                    problems: [
+                        { id: 144, name: "Binary Tree Preorder Traversal", difficulty: "easy" },
+                        { id: 100, name: "Same Tree", difficulty: "easy" },
+                        { id: 101, name: "Symmetric Tree", difficulty: "easy" },
+                        { id: 226, name: "Invert Binary Tree", difficulty: "easy" },
+                        { id: 114, name: "Flatten Binary Tree to Linked List", difficulty: "medium" },
+                        { id: 257, name: "Binary Tree Paths", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "DFS - Inorder",
+                    problems: [
+                        { id: 94, name: "Binary Tree Inorder Traversal", difficulty: "easy" },
+                        { id: 98, name: "Validate Binary Search Tree", difficulty: "medium" },
+                        { id: 230, name: "Kth Smallest Element in a BST", difficulty: "medium" },
+                        { id: 501, name: "Find Mode in Binary Search Tree", difficulty: "easy" },
+                        { id: 530, name: "Minimum Absolute Difference in BST", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "DFS - Postorder",
+                    problems: [
+                        { id: 145, name: "Binary Tree Postorder Traversal", difficulty: "easy" },
+                        { id: 104, name: "Maximum Depth of Binary Tree", difficulty: "easy" },
+                        { id: 110, name: "Balanced Binary Tree", difficulty: "easy" },
+                        { id: 124, name: "Binary Tree Maximum Path Sum", difficulty: "hard" },
+                        { id: 543, name: "Diameter of Binary Tree", difficulty: "easy" },
+                        { id: 337, name: "House Robber III", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "BFS - Level Order",
+                    problems: [
+                        { id: 102, name: "Binary Tree Level Order Traversal", difficulty: "medium" },
+                        { id: 103, name: "Binary Tree Zigzag Level Order", difficulty: "medium" },
+                        { id: 107, name: "Binary Tree Level Order Traversal II", difficulty: "medium" },
+                        { id: 199, name: "Binary Tree Right Side View", difficulty: "medium" },
+                        { id: 515, name: "Find Largest Value in Each Tree Row", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Special Tree Patterns",
+                    problems: [
+                        { id: 235, name: "Lowest Common Ancestor of a BST", difficulty: "medium" },
+                        { id: 236, name: "Lowest Common Ancestor of a Binary Tree", difficulty: "medium" },
+                        { id: 297, name: "Serialize and Deserialize Binary Tree", difficulty: "hard" },
+                        { id: 572, name: "Subtree of Another Tree", difficulty: "easy" }
+                    ]
+                }
+            ],
+            "Graphs": [
+                {
+                    name: "DFS - Islands & Components",
+                    problems: [
+                        { id: 200, name: "Number of Islands", difficulty: "medium" },
+                        { id: 695, name: "Max Area of Island", difficulty: "medium" },
+                        { id: 130, name: "Surrounded Regions", difficulty: "medium" },
+                        { id: 417, name: "Pacific Atlantic Water Flow", difficulty: "medium" },
+                        { id: 547, name: "Number of Provinces", difficulty: "medium" },
+                        { id: 733, name: "Flood Fill", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "BFS - Shortest Path",
+                    problems: [
+                        { id: 542, name: "01 Matrix", difficulty: "medium" },
+                        { id: 994, name: "Rotting Oranges", difficulty: "medium" },
+                        { id: 1091, name: "Shortest Path in Binary Matrix", difficulty: "medium" },
+                        { id: 127, name: "Word Ladder", difficulty: "hard" }
+                    ]
+                },
+                {
+                    name: "Topological Sort",
+                    problems: [
+                        { id: 207, name: "Course Schedule", difficulty: "medium" },
+                        { id: 210, name: "Course Schedule II", difficulty: "medium" },
+                        { id: 269, name: "Alien Dictionary", difficulty: "hard" },
+                        { id: 310, name: "Minimum Height Trees", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Union Find",
+                    problems: [
+                        { id: 200, name: "Number of Islands", difficulty: "medium" },
+                        { id: 547, name: "Number of Provinces", difficulty: "medium" },
+                        { id: 684, name: "Redundant Connection", difficulty: "medium" },
+                        { id: 721, name: "Accounts Merge", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Advanced Graph Algorithms",
+                    problems: [
+                        { id: 133, name: "Clone Graph", difficulty: "medium" },
+                        { id: 743, name: "Network Delay Time", difficulty: "medium" },
+                        { id: 787, name: "Cheapest Flights Within K Stops", difficulty: "medium" },
+                        { id: 1192, name: "Critical Connections in a Network", difficulty: "hard" }
+                    ]
+                }
+            ],
+            "Dynamic Programming": [
+                {
+                    name: "1D DP - Fibonacci Style",
+                    problems: [
+                        { id: 70, name: "Climbing Stairs", difficulty: "easy" },
+                        { id: 198, name: "House Robber", difficulty: "medium" },
+                        { id: 213, name: "House Robber II", difficulty: "medium" },
+                        { id: 746, name: "Min Cost Climbing Stairs", difficulty: "easy" },
+                        { id: 91, name: "Decode Ways", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Knapsack Problems",
+                    problems: [
+                        { id: 416, name: "Partition Equal Subset Sum", difficulty: "medium" },
+                        { id: 494, name: "Target Sum", difficulty: "medium" },
+                        { id: 322, name: "Coin Change", difficulty: "medium" },
+                        { id: 518, name: "Coin Change II", difficulty: "medium" },
+                        { id: 377, name: "Combination Sum IV", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "String DP - LCS & Edit Distance",
+                    problems: [
+                        { id: 1143, name: "Longest Common Subsequence", difficulty: "medium" },
+                        { id: 72, name: "Edit Distance", difficulty: "hard" },
+                        { id: 583, name: "Delete Operation for Two Strings", difficulty: "medium" },
+                        { id: 712, name: "Minimum ASCII Delete Sum", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Grid DP",
+                    problems: [
+                        { id: 62, name: "Unique Paths", difficulty: "medium" },
+                        { id: 63, name: "Unique Paths II", difficulty: "medium" },
+                        { id: 64, name: "Minimum Path Sum", difficulty: "medium" },
+                        { id: 120, name: "Triangle", difficulty: "medium" },
+                        { id: 221, name: "Maximal Square", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Advanced DP",
+                    problems: [
+                        { id: 300, name: "Longest Increasing Subsequence", difficulty: "medium" },
+                        { id: 354, name: "Russian Doll Envelopes", difficulty: "hard" },
+                        { id: 139, name: "Word Break", difficulty: "medium" },
+                        { id: 140, name: "Word Break II", difficulty: "hard" },
+                        { id: 312, name: "Burst Balloons", difficulty: "hard" }
+                    ]
+                }
+            ],
+            "Binary Search": [
+                {
+                    name: "Basic Binary Search",
+                    problems: [
+                        { id: 704, name: "Binary Search", difficulty: "easy" },
+                        { id: 35, name: "Search Insert Position", difficulty: "easy" },
+                        { id: 69, name: "Sqrt(x)", difficulty: "easy" },
+                        { id: 278, name: "First Bad Version", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "Rotated Sorted Array",
+                    problems: [
+                        { id: 33, name: "Search in Rotated Sorted Array", difficulty: "medium" },
+                        { id: 81, name: "Search in Rotated Sorted Array II", difficulty: "medium" },
+                        { id: 153, name: "Find Minimum in Rotated Sorted Array", difficulty: "medium" },
+                        { id: 154, name: "Find Minimum in Rotated Sorted Array II", difficulty: "hard" }
+                    ]
+                },
+                {
+                    name: "Binary Search on Answer",
+                    problems: [
+                        { id: 875, name: "Koko Eating Bananas", difficulty: "medium" },
+                        { id: 1011, name: "Capacity To Ship Packages Within D Days", difficulty: "medium" },
+                        { id: 410, name: "Split Array Largest Sum", difficulty: "hard" },
+                        { id: 1482, name: "Minimum Number of Days to Make m Bouquets", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Advanced Binary Search",
+                    problems: [
+                        { id: 34, name: "Find First and Last Position", difficulty: "medium" },
+                        { id: 162, name: "Find Peak Element", difficulty: "medium" },
+                        { id: 4, name: "Median of Two Sorted Arrays", difficulty: "hard" }
+                    ]
+                }
+            ],
+            "Heaps & Priority Queue": [
+                {
+                    name: "Top K Elements",
+                    problems: [
+                        { id: 215, name: "Kth Largest Element in an Array", difficulty: "medium" },
+                        { id: 347, name: "Top K Frequent Elements", difficulty: "medium" },
+                        { id: 451, name: "Sort Characters By Frequency", difficulty: "medium" },
+                        { id: 973, name: "K Closest Points to Origin", difficulty: "medium" },
+                        { id: 703, name: "Kth Largest Element in a Stream", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "K-way Merge",
+                    problems: [
+                        { id: 23, name: "Merge k Sorted Lists", difficulty: "hard" },
+                        { id: 373, name: "Find K Pairs with Smallest Sums", difficulty: "medium" },
+                        { id: 378, name: "Kth Smallest Element in a Sorted Matrix", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Two Heaps Pattern",
+                    problems: [
+                        { id: 295, name: "Find Median from Data Stream", difficulty: "hard" },
+                        { id: 480, name: "Sliding Window Median", difficulty: "hard" }
+                    ]
+                }
+            ],
+            "Backtracking": [
+                {
+                    name: "Subsets & Combinations",
+                    problems: [
+                        { id: 78, name: "Subsets", difficulty: "medium" },
+                        { id: 90, name: "Subsets II", difficulty: "medium" },
+                        { id: 77, name: "Combinations", difficulty: "medium" },
+                        { id: 17, name: "Letter Combinations of a Phone Number", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Permutations",
+                    problems: [
+                        { id: 46, name: "Permutations", difficulty: "medium" },
+                        { id: 47, name: "Permutations II", difficulty: "medium" },
+                        { id: 31, name: "Next Permutation", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Combination Sum",
+                    problems: [
+                        { id: 39, name: "Combination Sum", difficulty: "medium" },
+                        { id: 40, name: "Combination Sum II", difficulty: "medium" },
+                        { id: 216, name: "Combination Sum III", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Word Search & Path Finding",
+                    problems: [
+                        { id: 79, name: "Word Search", difficulty: "medium" },
+                        { id: 212, name: "Word Search II", difficulty: "hard" },
+                        { id: 131, name: "Palindrome Partitioning", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "N-Queens & Sudoku",
+                    problems: [
+                        { id: 51, name: "N-Queens", difficulty: "hard" },
+                        { id: 37, name: "Sudoku Solver", difficulty: "hard" },
+                        { id: 22, name: "Generate Parentheses", difficulty: "medium" }
+                    ]
+                }
+            ],
+            "Stacks & Queues": [
+                {
+                    name: "Valid Parentheses",
+                    problems: [
+                        { id: 20, name: "Valid Parentheses", difficulty: "easy" },
+                        { id: 32, name: "Longest Valid Parentheses", difficulty: "hard" },
+                        { id: 921, name: "Minimum Add to Make Parentheses Valid", difficulty: "medium" },
+                        { id: 22, name: "Generate Parentheses", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Monotonic Stack",
+                    problems: [
+                        { id: 739, name: "Daily Temperatures", difficulty: "medium" },
+                        { id: 496, name: "Next Greater Element I", difficulty: "easy" },
+                        { id: 503, name: "Next Greater Element II", difficulty: "medium" },
+                        { id: 84, name: "Largest Rectangle in Histogram", difficulty: "hard" },
+                        { id: 85, name: "Maximal Rectangle", difficulty: "hard" },
+                        { id: 42, name: "Trapping Rain Water", difficulty: "hard" }
+                    ]
+                },
+                {
+                    name: "Expression Evaluation",
+                    problems: [
+                        { id: 150, name: "Evaluate Reverse Polish Notation", difficulty: "medium" },
+                        { id: 224, name: "Basic Calculator", difficulty: "hard" },
+                        { id: 227, name: "Basic Calculator II", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Design Problems",
+                    problems: [
+                        { id: 155, name: "Min Stack", difficulty: "medium" },
+                        { id: 232, name: "Implement Queue using Stacks", difficulty: "easy" },
+                        { id: 225, name: "Implement Stack using Queues", difficulty: "easy" }
+                    ]
+                }
+            ],
+            "Linked Lists": [
+                {
+                    name: "Reversal",
+                    problems: [
+                        { id: 206, name: "Reverse Linked List", difficulty: "easy" },
+                        { id: 92, name: "Reverse Linked List II", difficulty: "medium" },
+                        { id: 25, name: "Reverse Nodes in k-Group", difficulty: "hard" },
+                        { id: 234, name: "Palindrome Linked List", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "Merging & Sorting",
+                    problems: [
+                        { id: 21, name: "Merge Two Sorted Lists", difficulty: "easy" },
+                        { id: 23, name: "Merge k Sorted Lists", difficulty: "hard" },
+                        { id: 148, name: "Sort List", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Cycle Detection",
+                    problems: [
+                        { id: 141, name: "Linked List Cycle", difficulty: "easy" },
+                        { id: 142, name: "Linked List Cycle II", difficulty: "medium" },
+                        { id: 160, name: "Intersection of Two Linked Lists", difficulty: "easy" }
+                    ]
+                },
+                {
+                    name: "Reordering & Manipulation",
+                    problems: [
+                        { id: 19, name: "Remove Nth Node From End of List", difficulty: "medium" },
+                        { id: 24, name: "Swap Nodes in Pairs", difficulty: "medium" },
+                        { id: 61, name: "Rotate List", difficulty: "medium" },
+                        { id: 143, name: "Reorder List", difficulty: "medium" }
+                    ]
+                }
+            ],
+            "Greedy": [
+                {
+                    name: "Interval Problems",
+                    problems: [
+                        { id: 56, name: "Merge Intervals", difficulty: "medium" },
+                        { id: 57, name: "Insert Interval", difficulty: "medium" },
+                        { id: 435, name: "Non-overlapping Intervals", difficulty: "medium" },
+                        { id: 452, name: "Minimum Number of Arrows to Burst Balloons", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Jump Game",
+                    problems: [
+                        { id: 55, name: "Jump Game", difficulty: "medium" },
+                        { id: 45, name: "Jump Game II", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Task Scheduling",
+                    problems: [
+                        { id: 621, name: "Task Scheduler", difficulty: "medium" },
+                        { id: 767, name: "Reorganize String", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Gas Station & Partition",
+                    problems: [
+                        { id: 134, name: "Gas Station", difficulty: "medium" },
+                        { id: 135, name: "Candy", difficulty: "hard" },
+                        { id: 406, name: "Queue Reconstruction by Height", difficulty: "medium" }
+                    ]
+                }
+            ],
+            "MAANG Companies": [
+                {
+                    name: "Google Favorites",
+                    problems: [
+                        { id: 1, name: "Two Sum", difficulty: "easy" },
+                        { id: 15, name: "3Sum", difficulty: "medium" },
+                        { id: 200, name: "Number of Islands", difficulty: "medium" },
+                        { id: 42, name: "Trapping Rain Water", difficulty: "hard" },
+                        { id: 297, name: "Serialize and Deserialize Binary Tree", difficulty: "hard" }
+                    ]
+                },
+                {
+                    name: "Amazon Favorites",
+                    problems: [
+                        { id: 1, name: "Two Sum", difficulty: "easy" },
+                        { id: 121, name: "Best Time to Buy and Sell Stock", difficulty: "easy" },
+                        { id: 200, name: "Number of Islands", difficulty: "medium" },
+                        { id: 23, name: "Merge k Sorted Lists", difficulty: "hard" },
+                        { id: 146, name: "LRU Cache", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Meta (Facebook) Favorites",
+                    problems: [
+                        { id: 1, name: "Two Sum", difficulty: "easy" },
+                        { id: 238, name: "Product of Array Except Self", difficulty: "medium" },
+                        { id: 215, name: "Kth Largest Element in an Array", difficulty: "medium" },
+                        { id: 56, name: "Merge Intervals", difficulty: "medium" },
+                        { id: 314, name: "Binary Tree Vertical Order Traversal", difficulty: "medium" }
+                    ]
+                },
+                {
+                    name: "Microsoft Favorites",
+                    problems: [
+                        { id: 1, name: "Two Sum", difficulty: "easy" },
+                        { id: 206, name: "Reverse Linked List", difficulty: "easy" },
+                        { id: 102, name: "Binary Tree Level Order Traversal", difficulty: "medium" },
+                        { id: 297, name: "Serialize and Deserialize Binary Tree", difficulty: "hard" }
+                    ]
+                }
+            ]
+        };
+
+        function getLeetCodeUrl(id, name) {
+            const slug = name.toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-');
+            return `https://leetcode.com/problems/${slug}/`;
+        }
+
+        function App() {
+            const [activeCategory, setActiveCategory] = useState("Arrays & Hashing");
+            const [completedProblems, setCompletedProblems] = useState(() => {
+                const saved = localStorage.getItem('dsa-completed');
+                return saved ? JSON.parse(saved) : {};
+            });
+            const [searchQuery, setSearchQuery] = useState("");
+            const [difficultyFilter, setDifficultyFilter] = useState("all");
+            const [expandedPatterns, setExpandedPatterns] = useState({});
+
+            useEffect(() => {
+                localStorage.setItem('dsa-completed', JSON.stringify(completedProblems));
+            }, [completedProblems]);
+
+            const toggleProblem = (id) => {
+                setCompletedProblems(prev => ({
+                    ...prev,
+                    [id]: !prev[id]
+                }));
+            };
+
+            const togglePattern = (key) => {
+                setExpandedPatterns(prev => ({
+                    ...prev,
+                    [key]: !prev[key]
+                }));
+            };
+
+            const stats = useMemo(() => {
+                const allProblems = Object.values(DSA_DATA).flat()
+                    .flatMap(pattern => pattern.problems);
+                const uniqueProblems = new Map();
+                allProblems.forEach(p => uniqueProblems.set(p.id, p));
+                const totalProblems = uniqueProblems.size;
+                const completed = Object.values(completedProblems).filter(Boolean).length;
+                const percentage = totalProblems > 0 ? Math.round((completed / totalProblems) * 100) : 0;
+                
+                const easy = Array.from(uniqueProblems.values()).filter(p => p.difficulty === 'easy').length;
+                const medium = Array.from(uniqueProblems.values()).filter(p => p.difficulty === 'medium').length;
+                const hard = Array.from(uniqueProblems.values()).filter(p => p.difficulty === 'hard').length;
+                
+                return { totalProblems, completed, percentage, easy, medium, hard };
+            }, [completedProblems]);
+
+            const filteredPatterns = useMemo(() => {
+                const patterns = DSA_DATA[activeCategory] || [];
+                
+                return patterns.map(pattern => ({
+                    ...pattern,
+                    problems: pattern.problems.filter(p => {
+                        const matchesSearch = !searchQuery || 
+                            p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            p.id.toString().includes(searchQuery);
+                        const matchesDifficulty = difficultyFilter === 'all' || p.difficulty === difficultyFilter;
+                        return matchesSearch && matchesDifficulty;
+                    })
+                })).filter(pattern => pattern.problems.length > 0);
+            }, [activeCategory, searchQuery, difficultyFilter]);
+
+            return (
+                <div>
+                    <div className="header">
+                        <h1>🚀 DSA Master Tracker</h1>
+                        <p>Track your progress across 700+ LeetCode problems • Pattern-based learning for interview success</p>
+                        
+                        <div className="stats">
+                            <div className="stat-card">
+                                <span className="stat-number">{stats.completed}</span>
+                                <span className="stat-label">Completed</span>
+                            </div>
+                            <div className="stat-card">
+                                <span className="stat-number">{stats.totalProblems}</span>
+                                <span className="stat-label">Total</span>
+                            </div>
+                            <div className="stat-card">
+                                <span className="stat-number">{stats.percentage}%</span>
+                                <span className="stat-label">Progress</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="container">
+                        <div className="controls">
+                            <input
+                                type="text"
+                                className="search-box"
+                                placeholder="🔍 Search problems by name or number..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                            
+                            <div className="difficulty-filters">
+                                <button 
+                                    className={`filter-btn ${difficultyFilter === 'all' ? 'active' : ''}`}
+                                    onClick={() => setDifficultyFilter('all')}
+                                >
+                                    All Problems ({stats.totalProblems})
+                                </button>
+                                <button 
+                                    className={`filter-btn ${difficultyFilter === 'easy' ? 'active' : ''}`}
+                                    onClick={() => setDifficultyFilter('easy')}
+                                >
+                                    Easy ({stats.easy})
+                                </button>
+                                <button 
+                                    className={`filter-btn ${difficultyFilter === 'medium' ? 'active' : ''}`}
+                                    onClick={() => setDifficultyFilter('medium')}
+                                >
+                                    Medium ({stats.medium})
+                                </button>
+                                <button 
+                                    className={`filter-btn ${difficultyFilter === 'hard' ? 'active' : ''}`}
+                                    onClick={() => setDifficultyFilter('hard')}
+                                >
+                                    Hard ({stats.hard})
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="tabs">
+                            {Object.keys(DSA_DATA).map(category => (
+                                <div
+                                    key={category}
+                                    className={`tab ${activeCategory === category ? 'active' : ''}`}
+                                    onClick={() => setActiveCategory(category)}
+                                >
+                                    {category}
+                                </div>
+                            ))}
+                        </div>
+
+                        {filteredPatterns.map((pattern, patternIdx) => {
+                            const key = `${activeCategory}-${patternIdx}`;
+                            const isExpanded = expandedPatterns[key];
+                            const completedCount = pattern.problems.filter(p => completedProblems[p.id]).length;
+                            const progress = (completedCount / pattern.problems.length) * 100;
+
+                            return (
+                                <div key={key} className="pattern-section">
+                                    <div 
+                                        className="pattern-header"
+                                        onClick={() => togglePattern(key)}
+                                    >
+                                        <div className="pattern-title">
+                                            <span className={`expand-icon ${isExpanded ? 'expanded' : ''}`}>▶</span>
+                                            {pattern.name}
+                                        </div>
+                                        <div className="pattern-info">
+                                            <span className="progress-badge">
+                                                {completedCount}/{pattern.problems.length}
+                                            </span>
+                                            <div className="progress-bar-container">
+                                                <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className={`pattern-content ${isExpanded ? 'expanded' : ''}`}>
+                                        <div className="problems-grid">
+                                            {pattern.problems.map(problem => (
+                                                <div 
+                                                    key={problem.id}
+                                                    className={`problem-card ${completedProblems[problem.id] ? 'completed' : ''}`}
+                                                >
+                                                    <div
+                                                        className={`checkbox ${completedProblems[problem.id] ? 'checked' : ''}`}
+                                                        onClick={() => toggleProblem(problem.id)}
+                                                    ></div>
+                                                    
+                                                    <div className="problem-info">
+                                                        <div className="problem-name">
+                                                            {problem.id}. {problem.name}
+                                                        </div>
+                                                        <span className={`difficulty-badge difficulty-${problem.difficulty}`}>
+                                                            {problem.difficulty}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <a
+                                                        href={getLeetCodeUrl(problem.id, problem.name)}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="leetcode-btn"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        Solve →
+                                                    </a>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+                        <div className="resources">
+                            <h2>📚 Essential Resources</h2>
+                            <div className="resource-grid">
+                                <a href="https://thita.ai/dsa-patterns-sheet" target="_blank" rel="noopener noreferrer" className="resource-card">
+                                    <div className="resource-title">📊 Pattern Tracking Sheet</div>
+                                    <div className="resource-desc">Complete DSA pattern sheet by Swati Ahuja</div>
+                                </a>
+                                <a href="https://www.youtube.com/watch?v=DKWEYzF2xJU&list=PL2SB3o9_VW78xKoiCPtzLnTWjMOklYlNy" target="_blank" rel="noopener noreferrer" className="resource-card">
+                                    <div className="resource-title">🎥 Video Tutorials</div>
+                                    <div className="resource-desc">Weekly pattern explanations and solutions</div>
+                                </a>
+                                <a href="https://thita.ai/dashboard/learning-path/dsa" target="_blank" rel="noopener noreferrer" className="resource-card">
+                                    <div className="resource-title">📖 DSA Theory</div>
+                                    <div className="resource-desc">Comprehensive learning path and concepts</div>
+                                </a>
+                                <a href="https://discord.gg/zxywjSuvDT" target="_blank" rel="noopener noreferrer" className="resource-card">
+                                    <div className="resource-title">💬 Discord Community</div>
+                                    <div className="resource-desc">Get help and discuss problems</div>
+                                </a>
+                                <a href="https://leetcode.com/problemset/" target="_blank" rel="noopener noreferrer" className="resource-card">
+                                    <div className="resource-title">💻 LeetCode</div>
+                                    <div className="resource-desc">Official problem platform</div>
+                                </a>
+                                <a href="https://docs.google.com/spreadsheets/d/1EEYzyD_483B-7CmWxsJB_zycdv4Y5dxnzcoEQtaIfuk" target="_blank" rel="noopener noreferrer" className="resource-card">
+                                    <div className="resource-title">⚡ 30-Day Plan</div>
+                                    <div className="resource-desc">Fast-track revision for interviews</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
