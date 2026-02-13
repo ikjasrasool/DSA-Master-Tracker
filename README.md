@@ -2,7 +2,7 @@
 
 A powerful, pattern-based **DSA Progress Tracker** built using HTML, CSS, and JavaScript.
 
-Track 700+ curated LeetCode problems across all major interview topics.
+Track LeetCode problems across all major interview topics.
 
 🌐 Live Demo:
 https://ikjasrasool.github.io/DSA-Master-Tracker/
