@@ -1,6 +1,6 @@
 # 🚀 DSA Master Tracker – Ultimate Interview Preparation
 
-A powerful, pattern-based **DSA Progress Tracker** built using React (CDN), HTML, CSS, and JavaScript.
+A powerful, pattern-based **DSA Progress Tracker** built using HTML, CSS, and JavaScript.
 
 Track 700+ curated LeetCode problems across all major interview topics.
 
@@ -11,7 +11,6 @@ https://ikjasrasool.github.io/DSA-Master-Tracker/
 
 ## 🔥 Features
 
-✅ 700+ curated interview problems  
 ✅ Organized by patterns (Arrays, DP, Graphs, Trees, etc.)  
 ✅ Difficulty filter (Easy / Medium / Hard)  
 ✅ Real-time progress tracking  
@@ -29,7 +28,6 @@ https://ikjasrasool.github.io/DSA-Master-Tracker/
 - HTML5
 - CSS3
 - JavaScript (ES6)
-- React 18 (CDN)
 - Babel Standalone
 - GitHub Pages (Deployment)
 
@@ -53,24 +51,6 @@ https://ikjasrasool.github.io/DSA-Master-Tracker/
 
 ---
 
-## 🎯 Why This Project Is Powerful
-
-This project demonstrates:
-
-- Advanced state management with React hooks
-- Large structured data handling
-- Pattern-based DSA understanding
-- UI/UX design skills
-- Search + filtering logic
-- Real-world SaaS style progress system
-
-Perfect for:
-- Internship applications
-- Placement portfolio
-- Interview preparation
-- Recruiter showcase
-
----
 
 ## 👨‍💻 Author
 
